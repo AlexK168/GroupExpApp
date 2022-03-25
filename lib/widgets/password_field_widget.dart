@@ -1,72 +1,25 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class PasswordFormField extends StatefulWidget {
+
+  final TextEditingController textEditingController;
+
+  const PasswordFormField({
+    Key? key,
+    required this.textEditingController,
+  }) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<PasswordFormField> createState() => _PasswordFormFieldState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _formEmailFieldKey = GlobalKey<FormFieldState>();
+class _PasswordFormFieldState extends State<PasswordFormField> {
   final _formPassFieldKey = GlobalKey<FormFieldState>();
   bool _obscured = true;
   final textFieldFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.all(32),
-        child: Form(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildEmail(),
-              const SizedBox(height: 12.0),
-              _buildPassword(),
-              const SizedBox(height: 50),
-              ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                      );
-                    }
-                  },
-                  child: const Text("Log in")),
-            ]
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEmail() {
-    return TextFormField(
-      key: _formEmailFieldKey,
-      keyboardType: TextInputType.emailAddress,
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: UnderlineInputBorder(),
-        labelText: 'Email',
-        prefixIcon: Icon(Icons.email),
-      ),
-      validator: (value) {
-        if (EmailValidator.validate(value!)) {
-          return null;
-        }
-        return 'Please, enter valid email';
-      },
-      onChanged: (text){
-        _formEmailFieldKey.currentState!.validate();
-      },
-    );
-  }
-
-  Widget _buildPassword() {
     return TextFormField(
       key: _formPassFieldKey,
       obscureText: _obscured,
@@ -118,9 +71,11 @@ class _LoginPageState extends State<LoginPage> {
       onChanged: (text) {
         _formPassFieldKey.currentState!.validate();
       },
+      controller: widget.textEditingController,
 
     );
   }
+
   void togglePassVisibility() {
     setState(() {
       _obscured = !_obscured;
