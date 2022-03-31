@@ -3,10 +3,17 @@ import 'package:flutter/material.dart';
 class PasswordFormField extends StatefulWidget {
 
   final TextEditingController textEditingController;
+  final bool validateOnChanged;
+  final ValueSetter<bool> onValidated;
+  final String Function(String? value) validateFunc;
 
   const PasswordFormField({
     Key? key,
     required this.textEditingController,
+    this.validateOnChanged = true,
+    required this.onValidated,
+    required this.validateFunc,
+
   }) : super(key: key);
 
   @override
@@ -41,35 +48,14 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
           )
       ),
       validator: (value) {
-        RegExp oneUpperCase = RegExp(r'[A-Z]');
-        RegExp oneLowerCase = RegExp(r'[a-z]');
-        RegExp oneDigit = RegExp(r'[0-9]');
-        RegExp oneSpecialChar = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
-        if (value == null || value.isEmpty) {
-          return "Password can't be empty";
-        } else
-        if (!oneLowerCase.hasMatch(value)) {
-          return 'Password has to contain at least one lower case letter';
-        } else
-        if (!oneUpperCase.hasMatch(value)) {
-          return 'Password has to contain at least one upper case letter';
-        } else
-        if (!oneDigit.hasMatch(value)) {
-          return 'Password has to contain at least one digit';
-        } else
-        if (!oneSpecialChar.hasMatch(value)) {
-          return 'Password has to contain at least one special character';
-        } else
-        if(value.length < 6 || value.length > 20) {
-          return 'Password has to be 6-20 characters long';
-        } else
-        if (value.contains(' ')) {
-          return "Password can't contain spaces";
-        }
-        return null;
+        String validationMsg = widget.validateFunc(value);
+        widget.onValidated(validationMsg.isEmpty);
+        return validationMsg.isEmpty ? null : validationMsg;
       },
       onChanged: (text) {
-        _formPassFieldKey.currentState!.validate();
+        if (widget.validateOnChanged) {
+          _formPassFieldKey.currentState!.validate();
+        }
       },
       controller: widget.textEditingController,
 

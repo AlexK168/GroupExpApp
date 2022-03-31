@@ -3,9 +3,11 @@ import 'package:email_validator/email_validator.dart';
 
 class EmailFormField extends StatefulWidget {
   final TextEditingController textEditingController;
+  final ValueSetter<bool> onValidated;
   const EmailFormField({
     Key? key,
     required this.textEditingController,
+    required this.onValidated,
   }) : super(key: key);
 
   @override
@@ -27,10 +29,9 @@ class _EmailFormFieldState extends State<EmailFormField> {
         prefixIcon: Icon(Icons.email),
       ),
       validator: (value) {
-        if (EmailValidator.validate(value!)) {
-          return null;
-        }
-        return 'Please, enter valid email';
+        bool isEmailValid = EmailValidator.validate(value!);
+        widget.onValidated(isEmailValid);
+        return isEmailValid ? null : 'Please, enter valid email';
       },
       onChanged: (text){
         _formEmailFieldKey.currentState!.validate();

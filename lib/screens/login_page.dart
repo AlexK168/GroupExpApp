@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:groupexp/widgets/email_field_widget.dart';
-import 'package:groupexp/widgets/password_field_widget.dart';
+import 'package:groupexp/screens/register_page.dart';
+import 'package:groupexp/widgets/email_field.dart';
+import 'package:groupexp/widgets/password_field.dart';
+
+import '../services/pass_validator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -13,12 +16,19 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
+  bool _isPasswordValid = false;
+  bool _isEmailValid = false;
+  PassValidator validator = PassValidator(onlyEmptyValidation: true);
 
   @override
   void dispose() {
     passController.dispose();
     emailController.dispose();
     super.dispose();
+  }
+
+  bool isFormValid() {
+    return _isPasswordValid && _isEmailValid;
   }
 
   @override
@@ -29,19 +39,65 @@ class _LoginPageState extends State<LoginPage> {
         child: Form(
           key: _formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            //mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              EmailFormField(textEditingController: emailController),
+              const Spacer(),
+              EmailFormField(
+                textEditingController: emailController,
+                onValidated: (isValid) {
+                  setState(() {
+                    _isEmailValid = isValid;
+                  });
+                },
+              ),
               const SizedBox(height: 12.0),
-              PasswordFormField(textEditingController: passController),
-              const SizedBox(height: 50),
+              PasswordFormField(
+                textEditingController: passController,
+                onValidated: (isValid) {
+                  setState(() {
+                    _isPasswordValid = isValid;
+                  });
+                },
+                validateFunc: validator.validate),
+              Container(
+                alignment: Alignment.centerRight,
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                child: GestureDetector(
+                  child: const Text(
+                    "Forgot your password?",
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12.0),
               ElevatedButton(
-                  onPressed: () {
+                  onPressed:  isFormValid() ? () {
                     if (_formKey.currentState!.validate()) {
-                      // print(passController.text);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Processing Data')),
+                      );
                     }
+                  } : null,
+                  child: const Text("Log in")
+              ),
+              const Spacer(),
+              Container(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (content) => const RegisterPage()));
                   },
-                  child: const Text("Log in")),
+                  child: const Text(
+                    "Don't have an account? Register",
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              )
             ]
           ),
         ),
