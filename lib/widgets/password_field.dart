@@ -3,17 +3,14 @@ import 'package:flutter/material.dart';
 class PasswordFormField extends StatefulWidget {
 
   final TextEditingController textEditingController;
-  final bool validateOnChanged;
   final ValueSetter<bool> onValidated;
   final String Function(String? value) validateFunc;
 
   const PasswordFormField({
     Key? key,
     required this.textEditingController,
-    this.validateOnChanged = true,
     required this.onValidated,
     required this.validateFunc,
-
   }) : super(key: key);
 
   @override
@@ -53,9 +50,7 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
         return validationMsg.isEmpty ? null : validationMsg;
       },
       onChanged: (text) {
-        if (widget.validateOnChanged) {
-          _formPassFieldKey.currentState!.validate();
-        }
+         _formPassFieldKey.currentState!.validate();
       },
       controller: widget.textEditingController,
 
