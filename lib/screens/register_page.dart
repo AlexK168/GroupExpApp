@@ -5,6 +5,7 @@ import 'package:groupexp/widgets/email_field.dart';
 import 'package:groupexp/widgets/password_field.dart';
 
 class RegisterPage extends StatefulWidget {
+
   const RegisterPage({Key? key}) : super(key: key);
 
   @override
@@ -90,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   alignment: Alignment.bottomCenter,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (content) => const LoginPage()));
+                      Navigator.pop(context);
                     },
                     child: const Text(
                       "Already have an account? Log in",
