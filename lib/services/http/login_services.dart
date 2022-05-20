@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:groupexp/exceptions/auth_response_map.dart';
 import 'package:groupexp/exceptions/failure.dart';
 import 'package:groupexp/model/user.dart';
 import 'package:http/http.dart';
 
-class LoginService {
+class AuthService {
   Client client = Client();
 
   // TODO: implement login
@@ -17,20 +18,24 @@ class LoginService {
           },
           body: jsonEncode(user.toJson())
       );
+      var body = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        var body = jsonDecode(response.body);
         String token = body['auth_token'];
         return token;
-      } else {
-        throw Failure(response.body);
+      } else if (response.statusCode >= 500) {
+        throw Failure("Server error");
+      }
+      else {
+        AuthError error = AuthError.fromJson(body);
+        throw Failure(error.toString());
       }
 
     } on SocketException {
       throw Failure("No internet connection");
     } on HttpException {
-      throw Failure("Http error");
+      throw Failure("Internal error");
     } on FormatException {
-      throw Failure("Bad format");
+      throw Failure("Internal error");
     }
   }
 

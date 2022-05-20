@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-// import 'package:groupexp/controllers/login_controller.dart';
 import 'package:groupexp/screens/login_page.dart';
-import 'package:groupexp/services/http/login_services.dart';
 import 'package:groupexp/view_model/login_view_model.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
-  var services = LoginService();
-  // var controller = LoginController(services);
-
+void main() {
   runApp(const MyApp());
 }
 
