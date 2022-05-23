@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:groupexp/screens/register_page.dart';
-import 'package:groupexp/view_model/register_view_model.dart';
+import 'package:groupexp/screens/landing_page.dart';
+import 'package:groupexp/utils/providers.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -15,15 +15,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'GroupExp',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: providers,
+      child: MaterialApp(
+          title: 'GroupExp',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const LandingPage()
       ),
-      home: ChangeNotifierProvider(
-        create: (_) => RegisterViewModel(),
-        child: const RegisterPage(),
-      )
     );
   }
 }

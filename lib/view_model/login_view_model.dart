@@ -19,14 +19,12 @@ class LoginViewModel extends AuthViewModel {
       showInSnackBar(f.toString(), context);
       return;
     }
-
-    //TODO: save data to shared pref-s.
-
+    await saveTokenToPrefs();
     setState(NotifierState.loaded);
-    //TODO: push and remove prev route so the user can't get back
-    Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const PartiesPage())
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => const PartiesPage(),
+      ),
     );
   }
 }

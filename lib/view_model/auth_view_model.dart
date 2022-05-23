@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/http/auth_service.dart';
 
 enum NotifierState { initial, loading, loaded, failed }
@@ -20,4 +21,9 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   late String token;
+
+  Future saveTokenToPrefs() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("token", token);
+  }
 }
