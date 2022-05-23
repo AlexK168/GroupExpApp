@@ -39,8 +39,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     LoginViewModel viewModel = Provider.of<LoginViewModel>(context);
-    viewModel.setEmailController(emailController);
-    viewModel.setPassController(passController);
+    viewModel.emailController = emailController;
+    viewModel.passController = passController;
 
     return ModalProgressHUD(
       progressIndicator: const CircularProgressIndicator(),
@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                 ElevatedButton(
                   onPressed:  isFormValid() ? () {
                     if (_formKey.currentState!.validate()) {
-                      Provider.of<LoginViewModel>(context, listen: false).login(context);
+                      viewModel.login(context);
                     }
                   } : null,
                   child: const Text("Log in")

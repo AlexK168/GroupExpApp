@@ -1,18 +1,24 @@
 class AuthError {
   AuthError({
-    required this.emailErrors,
-    required this.passErrors,
-    required this.nonFieldsErrors
+    this.emailErrors = const[],
+    this.passErrors = const[],
+    this.nonFieldsErrors = const[],
+    this.usernameErrors = const[],
+    this.detail = "",
   });
 
   List<String> nonFieldsErrors;
+  List<String> usernameErrors;
   List<String> emailErrors;
   List<String> passErrors;
+  String detail;
 
   factory AuthError.fromJson(Map<String, dynamic> json) => AuthError(
     emailErrors: json['email'] == null ? [] : List<String>.from(json['email']),
     nonFieldsErrors: json['non_field_errors'] == null ? [] : List<String>.from(json['non_field_errors']),
     passErrors: json['password'] == null ? [] : List<String>.from(json['password']),
+    usernameErrors: json['username'] == null ? [] : List<String>.from(json['username']),
+    detail: json['detail'] ?? "",
   );
 
   @override
@@ -25,6 +31,12 @@ class AuthError {
     } else
     if (nonFieldsErrors.isNotEmpty) {
       return nonFieldsErrors.join("; ");
+    }
+    if (usernameErrors.isNotEmpty) {
+      return "Username: " + usernameErrors.join("; ");
+    }
+    if (detail.isNotEmpty) {
+      return detail;
     }
     return "Error";
   }

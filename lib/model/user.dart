@@ -6,11 +6,20 @@ class User {
 
   const User({this.id = 0, this.username = "dummy", this.email = "dummy@dummy.dummy", this.password = ""});
 
-  User.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        username = json['username'],
-        email = json['email'],
-        password = json['password'];
+  // factory AuthError.fromJson(Map<String, dynamic> json) => AuthError(
+  //   emailErrors: json['email'] == null ? [] : List<String>.from(json['email']),
+  //   nonFieldsErrors: json['non_field_errors'] == null ? [] : List<String>.from(json['non_field_errors']),
+  //   passErrors: json['password'] == null ? [] : List<String>.from(json['password']),
+  //   usernameErrors: json['username'] == null ? [] : List<String>.from(json['username']),
+  //   detail: json['detail'] ?? "",
+  // );
+  factory User.fromJson(Map<String, dynamic> json) => User(
+    id: json['id'] ?? 0,
+    username: json['username'] ?? "None",
+    email: json['email'] ?? "None",
+    password: json['password'] ?? "None",
+  );
+
 
   Map<String, dynamic> toJson() => {
     'id': id,
