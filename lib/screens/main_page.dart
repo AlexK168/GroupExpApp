@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:groupexp/screens/parties_page.dart';
-import 'package:groupexp/screens/profile_page.dart';
-import 'package:groupexp/screens/friends_page.dart';
 import 'package:groupexp/widgets/navigation_drawer.dart';
 
 

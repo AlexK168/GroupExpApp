@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:groupexp/screens/register_page.dart';
 import 'package:groupexp/view_model/login_view_model.dart';
 import 'package:groupexp/widgets/email_field.dart';
 import 'package:groupexp/widgets/password_field.dart';
