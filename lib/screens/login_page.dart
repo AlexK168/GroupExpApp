@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                   alignment: Alignment.bottomCenter,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (content) => const RegisterPage()));
+                      Navigator.pushNamed(context, '/register');
                     },
                     child: const Text(
                       "Don't have an account? Register",

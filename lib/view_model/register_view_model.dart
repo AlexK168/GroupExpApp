@@ -4,7 +4,7 @@ import 'package:groupexp/view_model/util.dart';
 
 import '../exceptions/failure.dart';
 import '../model/user.dart';
-import '../screens/parties_page.dart';
+import '../screens/main_page.dart';
 
 class RegisterViewModel extends AuthViewModel {
   void register(BuildContext context) async {
@@ -25,10 +25,8 @@ class RegisterViewModel extends AuthViewModel {
 
     await saveTokenToPrefs();
     setState(NotifierState.loaded);
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => const PartiesPage(),
-      ),
+    Navigator.of(context).pushReplacementNamed(
+      '/main'
     );
   }
 }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:groupexp/screens/login_page.dart';
-import 'package:groupexp/screens/parties_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingPage extends StatefulWidget {
@@ -23,16 +21,12 @@ class _LandingPageState extends State<LandingPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = (prefs.getString('token') ?? "");
     if (_token == "") {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => const LoginPage(),
-        ),
+      Navigator.of(context).pushReplacementNamed(
+        '/login'
       );
     } else {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => const PartiesPage(),
-        ),
+      Navigator.of(context).pushReplacementNamed(
+          '/main'
       );
     }
   }

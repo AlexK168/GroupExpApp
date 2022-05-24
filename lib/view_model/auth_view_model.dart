@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:groupexp/view_model/util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/http/auth_service.dart';
-
-enum NotifierState { initial, loading, loaded, failed }
 
 class AuthViewModel extends ChangeNotifier {
   final authService = AuthService();
@@ -15,6 +14,7 @@ class AuthViewModel extends ChangeNotifier {
 
   NotifierState _state = NotifierState.initial;
   NotifierState get state => _state;
+
   void setState(NotifierState state) {
     _state = state;
     notifyListeners();

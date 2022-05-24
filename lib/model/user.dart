@@ -6,20 +6,13 @@ class User {
 
   const User({this.id = 0, this.username = "dummy", this.email = "dummy@dummy.dummy", this.password = ""});
 
-  // factory AuthError.fromJson(Map<String, dynamic> json) => AuthError(
-  //   emailErrors: json['email'] == null ? [] : List<String>.from(json['email']),
-  //   nonFieldsErrors: json['non_field_errors'] == null ? [] : List<String>.from(json['non_field_errors']),
-  //   passErrors: json['password'] == null ? [] : List<String>.from(json['password']),
-  //   usernameErrors: json['username'] == null ? [] : List<String>.from(json['username']),
-  //   detail: json['detail'] ?? "",
-  // );
+
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json['id'] ?? 0,
     username: json['username'] ?? "None",
     email: json['email'] ?? "None",
     password: json['password'] ?? "None",
   );
-
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -33,4 +26,15 @@ class User {
   }
 }
 
-User mockUser = const User(email: "babba_gump@gmail.com", password: "nsvZwA+\$UcP8m.");
+class UsersList {
+  final List<User> users;
+
+  UsersList({
+    required this.users,
+  });
+
+  factory UsersList.fromJson(List<dynamic> parsedJson) {
+    List<User> users = parsedJson.map((i)=>User.fromJson(i)).toList();
+    return UsersList(users: users);
+  }
+}
