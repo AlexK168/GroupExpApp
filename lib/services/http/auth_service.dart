@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:groupexp/exceptions/auth_error.dart';
 import 'package:groupexp/exceptions/failure.dart';
 import 'package:groupexp/model/user.dart';
@@ -7,16 +7,15 @@ import 'package:groupexp/services/http/http_service.dart';
 import 'package:groupexp/services/http/urls.dart';
 
 class AuthService extends HttpService{
-
   Future<String> login(User user) async {
-    try {
+    return await tryRequest(() async {
       final response = await client.post(
           Uri.parse(loginUrl),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(user.toJson())
-      );
+      ).timeout(const Duration(seconds: 5));
       var body = jsonDecode(response.body);
       if (response.statusCode == 200) {
         String token = body['auth_token'];
@@ -25,29 +24,21 @@ class AuthService extends HttpService{
         throw Failure("Server error");
       }
       else {
-        AuthError error = AuthError.fromJson(body);
+        HttpResponseError error = HttpResponseError.fromJson(body);
         throw Failure(error.toString());
       }
-
-    } on SocketException {
-      throw Failure("No internet connection");
-    } on HttpException {
-      throw Failure("Internal error");
-    } on FormatException {
-      throw Failure("Internal error");
-    }
+    });
   }
 
-  // TODO: implement register
   Future<User> register(User user) async {
-    try {
+    return await tryRequest(() async {
       final response = await client.post(
           Uri.parse(registerUrl),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(user.toJson())
-      );
+      ).timeout(const Duration(seconds: 5));
       var body = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         User u = User.fromJson(body);
@@ -56,15 +47,21 @@ class AuthService extends HttpService{
         throw Failure("Server error");
       }
       else {
-        AuthError error = AuthError.fromJson(body);
+        HttpResponseError error = HttpResponseError.fromJson(body);
         throw Failure(error.toString());
       }
-    } on SocketException {
-      throw Failure("No internet connection");
-    } on HttpException {
-      throw Failure("Internal error");
-    } on FormatException {
-      throw Failure("Internal error");
-    }
+    });
+  }
+
+  Future<void> logout() async {
+    return await tryRequestWithToken((String token) async {
+      await client.post(
+          Uri.parse(logoutUrl),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Token ' + token,
+          },
+      ).timeout(const Duration(seconds: 5));
+    });
   }
 }

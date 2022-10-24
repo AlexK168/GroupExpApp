@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:groupexp/widgets/navigation_drawer.dart';
+import 'package:groupexp/screens/parties_page.dart';
 
 
 class MainPage extends StatefulWidget {
@@ -13,13 +13,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('GroupExp'),),
-      body: const Center(
-        child: Text('MainPage'),
-      ),
-      drawer: const NavigationDrawer()
-    );
+    return const PartiesPage();
   }
-}
 
+}

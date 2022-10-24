@@ -1,5 +1,5 @@
-class AuthError {
-  AuthError({
+class HttpResponseError {
+  HttpResponseError({
     this.emailErrors = const[],
     this.passErrors = const[],
     this.nonFieldsErrors = const[],
@@ -13,7 +13,7 @@ class AuthError {
   List<String> passErrors;
   String detail;
 
-  factory AuthError.fromJson(Map<String, dynamic> json) => AuthError(
+  factory HttpResponseError.fromJson(Map<String, dynamic> json) => HttpResponseError(
     emailErrors: json['email'] == null ? [] : List<String>.from(json['email']),
     nonFieldsErrors: json['non_field_errors'] == null ? [] : List<String>.from(json['non_field_errors']),
     passErrors: json['password'] == null ? [] : List<String>.from(json['password']),

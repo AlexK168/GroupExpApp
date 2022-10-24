@@ -24,6 +24,14 @@ class User {
   String toString() {
     return "id: $id\nusername: $username\nemail: $email\npassword: $password";
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is User &&
+        id == other.id &&
+        username == other.username &&
+        email == other.email;
+  }
 }
 
 class UsersList {
@@ -36,5 +44,14 @@ class UsersList {
   factory UsersList.fromJson(List<dynamic> parsedJson) {
     List<User> users = parsedJson.map((i)=>User.fromJson(i)).toList();
     return UsersList(users: users);
+  }
+
+  List<Map<String, dynamic>> toJson() {
+    List<Map<String, dynamic>> usersList = [];
+    for (User user in users) {
+      var userMap = user.toJson();
+      usersList.add(userMap);
+    }
+    return usersList;
   }
 }

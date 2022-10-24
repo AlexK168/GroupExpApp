@@ -13,7 +13,7 @@ class FriendsPage extends StatefulWidget {
 
 class _FriendsPageState extends State<FriendsPage> {
 
-  void _getUsers(BuildContext context) async {
+  Future _getUsers(BuildContext context) async {
     FriendsViewModel viewModel = Provider.of<FriendsViewModel>(context, listen: false);
     viewModel.getFriends(context);
   }
@@ -21,9 +21,28 @@ class _FriendsPageState extends State<FriendsPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _getUsers(context);
     });
+  }
+
+  Widget _buildButtons(FriendsViewModel viewModel) {
+    return viewModel.selectMode ? Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(100, 40)
+          ),
+          onPressed: (){
+            viewModel.selectMode = false;
+            Navigator.of(context).pop(viewModel.getSelectedUsers());
+          },
+          child: const Text('Back'),
+        ),
+        const SizedBox(height: 80,)
+      ],
+    ): Container();
   }
 
   @override
@@ -34,22 +53,49 @@ class _FriendsPageState extends State<FriendsPage> {
         drawer: const NavigationDrawer(),
         body: ModalProgressHUD(
           inAsyncCall: viewModel.loading,
-          child: viewModel.friends.isNotEmpty ? ListView.builder(
-              itemCount: viewModel.friends.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text(viewModel.friends[index].username),
-                );
-              }
-          ): const Center(child: Text('No friends yet')),
+          child: Column(
+            children: [
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    _getUsers(context);
+                  },
+                  child: ListView.builder(
+                      itemCount: viewModel.friends.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
+                          onLongPress: () {
+                            viewModel.toSelectMode(true);
+                            viewModel.select(index);
+                          },
+                          onTap: () {
+                            viewModel.select(index);
+                          },
+                          child: ListTile(
+                            title: Text(viewModel.friends[index].username),
+                            trailing: viewModel.selected[index] ? const Icon(Icons.check) : null,
+                          ),
+                        );
+                      }
+                  ),
+                ),
+              ),
+              _buildButtons(viewModel),
+            ],
+          )
         ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            //TODO: add a friend functionality
+            Navigator.of(context).pushNamed(
+              '/friends/users'
+            ).then((value) {
+              _getUsers(context);
+            });
           },
         ),
     );
   }
 }
+
 
